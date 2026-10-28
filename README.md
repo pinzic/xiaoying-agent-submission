@@ -23,7 +23,7 @@
 ```bash
 cd xiaoying-agent-submission
 
-# 无需安装依赖；Python 3.9+ 即可（开发环境 3.12）
+# 无需安装依赖；Python 3.9+ 即可（开发环境 3.13.14）
 python -m src.cli --question "员工加班后调休的有效期是多久？"
 ```
 
@@ -124,7 +124,7 @@ xiaoying-agent-submission/
 ├── tests/                    # 39 个 unittest 用例
 ├── examples/                 # 9 组输入 + 实际输出 + trace.jsonl + 扰动报告
 ├── data/
-│   ├── docs/                 # 13 份合成制度 / FAQ（D01–D09、P01–P03）
+│   ├── docs/                 # 12 份合成制度 / FAQ（D01–D09、P01–P03）
 │   └── rules.json            # 同义词、停用词、冲突取值规则、适用范围映射
 └── docs/                     # 五份交付文档
 ```
