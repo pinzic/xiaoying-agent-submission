@@ -1,0 +1,107 @@
+{
+  "status": "answered",
+  "answer": "根据 D04《加班与调休管理规定》（v1.3，2025-02-01 生效）第「调休有效期」节：「调休自加班发生当月起 6 个月内有效，逾期未使用的调休自动清零，不予折现」。",
+  "citations": [
+    {
+      "doc_id": "D04",
+      "section": "调休有效期",
+      "quote": "调休自加班发生当月起 6 个月内有效，逾期未使用的调休自动清零，不予折现。"
+    }
+  ],
+  "gaps": [],
+  "question": "加班换来的补休，最晚多久要休掉？",
+  "history": [],
+  "planner": "mock",
+  "tool_calls": 2,
+  "reason": "候选文档对同一事项取值一致，直接依据原文作答",
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "checked_citations": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "args": {
+        "query": "加班换来的补休，最晚多久要休掉？",
+        "top_k": 5
+      },
+      "decision_basis": "首轮：先用问题关键词检索制度库，确认是否存在可依据的文档",
+      "observation": {
+        "ok": true,
+        "summary": "检索「加班换来的补休，最晚多久要休掉？」命中 2 篇：D04(调休规则, score=9.8833)、D09(文档清单, score=3.9127)",
+        "data": {
+          "query": "加班换来的补休，最晚多久要休掉？",
+          "hits": [
+            {
+              "doc_id": "D04",
+              "title": "加班与调休管理规定",
+              "section": "调休规则",
+              "score": 9.8833,
+              "coverage": 0.167,
+              "effective_date": "2025-02-01"
+            },
+            {
+              "doc_id": "D09",
+              "title": "制度索引与版本说明",
+              "section": "文档清单",
+              "score": 3.9127,
+              "coverage": 0.167,
+              "effective_date": "2026-01-05"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 2,
+      "action": "read_doc",
+      "args": {
+        "doc_id": "D04"
+      },
+      "decision_basis": "命中 1 篇候选（D04）：摘要不足以判断是否冲突，先读原文",
+      "observation": {
+        "ok": true,
+        "summary": "读取 D04《加班与调休管理规定》v1.3（2025-02-01 生效，全公司），章节：加班申请、调休规则、调休有效期、加班补贴",
+        "data": {
+          "doc_id": "D04",
+          "title": "加班与调休管理规定",
+          "version": "v1.3",
+          "effective_date": "2025-02-01",
+          "scope": "全公司",
+          "sections": [
+            "加班申请",
+            "调休规则",
+            "调休有效期",
+            "加班补贴"
+          ],
+          "chars": 220
+        }
+      }
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "args": {
+        "status": "answered",
+        "answer": "根据 D04《加班与调休管理规定》（v1.3，2025-02-01 生效）第「调休有效期」节：「调休自加班发生当月起 6 个月内有效，逾期未使用的调休自动清零，不予折现」。",
+        "citations": [
+          {
+            "doc_id": "D04",
+            "section": "调休有效期",
+            "quote": "调休自加班发生当月起 6 个月内有效，逾期未使用的调休自动清零，不予折现。"
+          }
+        ],
+        "gaps": [],
+        "reason": "候选文档对同一事项取值一致，直接依据原文作答"
+      },
+      "decision_basis": "只有一篇候选文档命中且无其它制度可比对，直接依据该文档原文回答",
+      "observation": {
+        "ok": true,
+        "summary": "任务结束：answered"
+      },
+      "final": true
+    }
+  ]
+}

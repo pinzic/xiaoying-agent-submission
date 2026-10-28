@@ -1,0 +1,5 @@
+# 无第三方运行时依赖：核心链路只用 Python 标准库。
+# 测试使用标准库 unittest，无需安装。
+#
+# 如需接入真实模型，也无需额外 SDK（src/planner_llm.py 使用 urllib 直连 OpenAI 兼容接口）。
+# 若希望用 pytest 运行同一批用例：pip install pytest && pytest -q

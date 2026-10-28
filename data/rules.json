@@ -1,0 +1,69 @@
+{
+  "retrieval": {
+    "top_k": 5,
+    "min_coverage": 0.15,
+    "strong_coverage": 0.4,
+    "k1": 1.2,
+    "b": 0.75,
+    "max_read_docs": 2
+  },
+  "synonyms": {
+    "报销期限": ["报销时限", "报销时间", "提交报销", "报销单"],
+    "报销": ["费用", "发票", "单据"],
+    "调休": ["补休", "换休", "加班"],
+    "年假": ["带薪年假", "休假", "假期"],
+    "退款": ["退订", "取消订阅", "退费"],
+    "水印": ["logo", "标识"],
+    "审批": ["审核", "签批"],
+    "实习生": ["实习", "在校生"]
+  },
+  "stopwords": [
+    "请问", "一下", "多少", "多久", "什么", "怎么", "如何", "是否", "可以", "需要",
+    "我们", "公司", "这个", "那个", "的话", "吗", "呢", "吧", "的", "是", "有", "要",
+    "在", "和", "与", "了", "我", "你", "他", "它", "那", "这", "还", "也", "就"
+  ],
+  "followup_markers": ["那", "它", "这个", "那个", "上述", "刚才", "还有", "另外", "呢"],
+  "claim_patterns": [
+    {
+      "key": "reimbursement.deadline",
+      "label": "报销期限",
+      "unit": "天",
+      "question_terms": ["报销", "费用", "发票", "单据"],
+      "sentence_contains": ["报销", "提交"],
+      "value_regex": "(?<![\\d.])(\\d+)\\s*天",
+      "exclude_regex": "比价|工作日|小时"
+    },
+    {
+      "key": "leave.annual_days",
+      "label": "年假天数",
+      "unit": "天",
+      "question_terms": ["年假", "休假", "假期"],
+      "sentence_contains": ["年假"],
+      "value_regex": "(?<![\\d.])(\\d+)\\s*天",
+      "negation_regex": "不享受年假|无年假|没有年假",
+      "negation_value": 0
+    },
+    {
+      "key": "leave.comp_time_off_validity",
+      "label": "调休有效期",
+      "unit": "个月",
+      "question_terms": ["调休", "加班", "补休"],
+      "sentence_contains": ["调休"],
+      "value_regex": "(?<![\\d.])(\\d+)\\s*个月"
+    },
+    {
+      "key": "product.refund_window",
+      "label": "退款期限",
+      "unit": "天",
+      "question_terms": ["退款", "退订", "退费", "取消订阅"],
+      "sentence_contains": ["退款"],
+      "value_regex": "(?<![\\d.])(\\d+)\\s*天"
+    }
+  ],
+  "precedence_regex": "(以本(规定|办法|制度|规范)为准|本(规定|办法|制度)优先|以本(规定|办法)执行)",
+  "scope_map": {
+    "实习生": ["实习生", "实习"],
+    "正式员工": ["正式员工", "正式职工", "全职"],
+    "差旅": ["差旅", "出差"]
+  }
+}

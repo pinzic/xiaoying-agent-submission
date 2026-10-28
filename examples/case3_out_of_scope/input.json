@@ -1,0 +1,7 @@
+{
+  "question": "公司可以帮我办理日本签证吗？",
+  "history": [],
+  "faults": {},
+  "max_steps": 8,
+  "note": "资料外问题：两轮检索零命中，返回 insufficient_info 与资料缺口，不给答案。"
+}

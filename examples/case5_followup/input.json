@@ -1,0 +1,16 @@
+{
+  "question": "那要提前几天申请？",
+  "history": [
+    {
+      "role": "user",
+      "content": "正式员工的年假有多少天？"
+    },
+    {
+      "role": "assistant",
+      "content": "根据 D05，年假按工龄分为 5/10/15 天。"
+    }
+  ],
+  "faults": {},
+  "max_steps": 8,
+  "note": "上下文追问：问题本身没有「年假」，Agent 用上一轮问题补全检索词后命中 D05 的申请时限。"
+}

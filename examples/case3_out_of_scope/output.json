@@ -1,0 +1,73 @@
+{
+  "status": "insufficient_info",
+  "answer": null,
+  "citations": [],
+  "gaps": [
+    "知识库中未检索到与「公司可以帮我办理日本签证吗？」相关的制度或 FAQ 条目"
+  ],
+  "question": "公司可以帮我办理日本签证吗？",
+  "history": [],
+  "planner": "mock",
+  "tool_calls": 2,
+  "reason": "两轮检索均无命中，无法给出有依据的答案，按规则不猜测",
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "checked_citations": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "search_docs",
+      "args": {
+        "query": "公司可以帮我办理日本签证吗？",
+        "top_k": 5
+      },
+      "decision_basis": "首轮：先用问题关键词检索制度库，确认是否存在可依据的文档",
+      "observation": {
+        "ok": true,
+        "summary": "检索「公司可以帮我办理日本签证吗？」命中 0 篇文档",
+        "data": {
+          "query": "公司可以帮我办理日本签证吗？",
+          "hits": []
+        }
+      }
+    },
+    {
+      "step": 2,
+      "action": "search_docs",
+      "args": {
+        "query": "帮 办理日本签证",
+        "top_k": 5
+      },
+      "decision_basis": "首轮检索零命中，改用更宽的关键词再检索一次，确认是否只是表述差异",
+      "observation": {
+        "ok": true,
+        "summary": "检索「帮 办理日本签证」命中 0 篇文档",
+        "data": {
+          "query": "帮 办理日本签证",
+          "hits": []
+        }
+      }
+    },
+    {
+      "step": 3,
+      "action": "finish",
+      "args": {
+        "status": "insufficient_info",
+        "answer": null,
+        "citations": [],
+        "gaps": [
+          "知识库中未检索到与「公司可以帮我办理日本签证吗？」相关的制度或 FAQ 条目"
+        ],
+        "reason": "两轮检索均无命中，无法给出有依据的答案，按规则不猜测"
+      },
+      "decision_basis": "两轮检索都没有命中任何制度或 FAQ，判定为资料缺口，拒绝凭常识作答",
+      "observation": {
+        "ok": true,
+        "summary": "任务结束：insufficient_info"
+      },
+      "final": true
+    }
+  ]
+}
