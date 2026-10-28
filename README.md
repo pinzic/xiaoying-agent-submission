@@ -6,10 +6,15 @@
 | --- | --- |
 | 题号 | **企业知识问答 Agent** |
 | GitHub URL | https://github.com/pinzic/xiaoying-agent-submission |
-| 最终 commit SHA | `39d3d52dcb3bfc286cf02bc437761ec8069bd7ef` |
+| 最终 commit SHA | `1e57475899f206a8b675973c649b2c23612a7ed1` |
+| 内容锚点 tag | `v1.0-submission`（与该 SHA 指向同一 commit） |
 
-> 仓库为 **Public**，评审可直接访问。`39d3d52` 包含全部代码与文档；其后仅有一次 `docs:` 提交用于回填本表的地址与 SHA。
-> 远端核对：`git rev-parse origin/main`（详见 [§7 仓库地址](#7-仓库地址)）。
+> 仓库为 **Public**，评审无需额外授权即可访问与克隆。
+>
+> **关于 SHA 的一点说明**：包含全部代码、测试、9 组验证材料与五份文档的提交是 `1e57475`，
+> 并已打 tag `v1.0-submission` 固定下来（`commit` 的 SHA 无法自指，所以把地址与 SHA 回填进本文件本身
+> 会产生一个新的 README 提交）。因此若 `git rev-parse HEAD` 比上表的 SHA 多出一两个 `docs:` 提交，属正常。
+> 核对内容请用：`git rev-parse v1.0-submission^{commit}`，或 `git checkout v1.0-submission`。
 
 > 目标：帮员工在合成制度库/产品 FAQ 中找到**可核验**的答案——每条结论都能落到文档 ID、章节与逐字原文；
 > 遇到文档冲突且没有适用范围/优先依据时，**追问而不是替用户选**。
@@ -209,7 +214,14 @@ git log --oneline -3
 ```
 
 - 仓库为 **Public**，评审可直接访问，无需额外授权。
-- 提交 SHA：`39d3d52dcb3bfc286cf02bc437761ec8069bd7ef`（即 `origin/main` 上的代码提交）。
+- **提交 SHA**：`1e57475899f206a8b675973c649b2c23612a7ed1`（tag `v1.0-submission`）。
+  在该 SHA 之后只会有回填本表地址/SHA 的 `docs:` 提交，不含任何代码变更，故以此作为内容基准。
+  以下命令可取得完全一致的内容：
+
+  ```bash
+  git checkout v1.0-submission          # 或 git show v1.0-submission
+  git rev-parse v1.0-submission^{commit}   # → 1e57475899f206a8b675973c649b2c23612a7ed1
+  ```
 - 仓库中**不含任何真实密钥**：`.env.example` 只有变量名，`.env` 已被 `.gitignore` 忽略。
 - 克隆后建议再跑一遍验收，确认远端代码与本地一致：
   ```bash
