@@ -88,8 +88,15 @@ Trace 里每一步都带 `decision_basis`（面向输出的简要理由，不含
 ## 7. 上限与终止状态
 
 - 默认 `max_steps=8`、`max_tool_calls=6`，均可通过 CLI 覆盖；
-- 触达上限 → `status=incomplete`，`reason` 说明是哪一种上限，**不输出未验证的答案**；
+- 触达上限 → `status=incomplete`，`reason` 说明是哪一种上限（`step_limit_reached` /
+  `tool_call_limit_reached`），**不输出未验证的答案**，轨迹最后一步标记为 `final`；
+  此时 `validation` 为 `null`——没有任何引用产出，也就没有需要校验的东西；
+- 两种上限各有一组材料：`examples/case8_step_limit`、`examples/case9_tool_call_limit`；
 - 终止状态共 5 种：`answered` / `needs_clarification` / `insufficient_info` / `incomplete` / `failed`。
+
+失败原因也做了分类：`bad_arguments`（参数错误，不重试、如实说明）与 `upstream_timeout`
+（上游故障，允许换策略重试一次）走不同的分支。把"检索词为空"报成"服务超时"会误导排查方向，
+所以这是一条独立的判断而不是统一的重试逻辑（见 `docs/03-evaluation.md` §5 第 6 条）。
 
 ## 8. 可扩展点
 

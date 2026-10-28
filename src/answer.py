@@ -16,6 +16,14 @@ from .retrieval import content_terms
 NUM_UNITS = ("个工作日", "个月", "小时", "天", "元", "次")
 
 
+def _as_number(value: Any) -> float:
+    """把取值字符串转成可比较的数值；非数字退化为 0，保证排序不抛异常。"""
+    try:
+        return float(str(value).strip())
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _value_text(doc: Dict[str, Any]) -> str:
     """把取值渲染成自然语言；0 天这类取值改写成「不享受」，避免『为 0 天』的别扭表达。"""
     if doc.get("values") == ["0"]:
@@ -80,7 +88,8 @@ class Answerer:
                     continue
                 seen_values.add(c["value"])
                 all_claims.append(c)
-            all_claims.sort(key=lambda x: x["value"])
+            # 按数值升序（"10" < "5" 的字典序陷阱会让 5/10/15 排成 10、15、5）
+            all_claims.sort(key=lambda x: _as_number(x["value"]))
             extra = [c for c in all_claims if c["quote"] != sentence]
             for c in extra:
                 citations.append(Citation(doc["doc_id"], c["section"], c["quote"]))
@@ -92,12 +101,11 @@ class Answerer:
         else:
             answer += "。"
 
-        gaps = [] if len(docs) == 1 else []
         return {
             "status": "answered",
             "answer": answer,
             "citations": [c.as_dict() for c in citations],
-            "gaps": gaps,
+            "gaps": [],
             "reason": "候选文档对同一事项取值一致，直接依据原文作答",
         }
 

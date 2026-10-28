@@ -47,6 +47,24 @@ class RetrievalTest(unittest.TestCase):
         self.assertEqual(hit.doc_id, "P03")
         self.assertIn("7 天", hit.snippet)
 
+    def test_recall_benchmark_top1(self):
+        """docs/03 §4 引用的召回率数字：10 个问题的期望文档必须全部 top-1 命中。
+
+        放在测试里是为了避免文档里的数字与实现脱节——改了检索就一定会暴露。
+        """
+        cases = [
+            ("调休有效期", "D04"), ("报销期限", "D02"), ("年假有几天", "D05"),
+            ("实习生年假", "D06"), ("退款政策", "P03"), ("导出有水印吗", "P01"),
+            ("怎么换绑手机号", "P02"), ("出差住宿标准", "D03"),
+            ("采购需要几家比价", "D08"), ("客户数据能发给合作方吗", "D07"),
+        ]
+        missed = [(q, exp, self.ids(q)[:2]) for q, exp in cases if not self.ids(q) or self.ids(q)[0] != exp]
+        self.assertEqual(missed, [], f"top-1 未命中：{missed}")
+
+    def test_out_of_scope_questions_have_no_hits(self):
+        for question in ("公司可以帮我办理日本签证吗？", "我想问下旅游补贴", "公司附近的健身房"):
+            self.assertEqual(self.ids(question), [], question)
+
 
 if __name__ == "__main__":
     unittest.main()

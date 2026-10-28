@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from src.agent import Agent
 from src.docs_store import DocStore
@@ -73,6 +72,23 @@ CASES = [
         "max_steps": 8,
         "note": "工具失败（不可恢复）：两次检索均超时，返回 failed 并说明工具不可用，不猜测答案。",
     },
+    {
+        "dir": "case8_step_limit",
+        "question": "报销期限是多久？",
+        "history": [],
+        "faults": {},
+        "max_steps": 2,
+        "note": "执行上限：把步数预算压到 2 步，任务在读原文之前就被中止，返回 incomplete 且不输出未验证答案。",
+    },
+    {
+        "dir": "case9_tool_call_limit",
+        "question": "报销期限是多久？",
+        "history": [],
+        "faults": {},
+        "max_steps": 8,
+        "max_tool_calls": 1,
+        "note": "工具调用上限：只允许 1 次工具调用，检索完成后无法读原文，返回 incomplete 并说明是哪种上限。",
+    },
 ]
 
 
@@ -87,12 +103,14 @@ def main() -> None:
                 "question": case["question"],
                 "history": case["history"],
                 "faults": case["faults"],
-                "max_steps": case["max_steps"],
+                "max_steps": case.get("max_steps", 8),
+                "max_tool_calls": case.get("max_tool_calls", 6),
                 "note": case["note"],
             }, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
-        agent = Agent(store, rules, max_steps=case["max_steps"], faults=case["faults"])
+        agent = Agent(store, rules, max_steps=case.get("max_steps", 8),
+                      max_tool_calls=case.get("max_tool_calls", 6), faults=case["faults"])
         result = agent.run(case["question"], case["history"]).as_dict()
         (out_dir / "output.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         with (out_dir / "trace.jsonl").open("w", encoding="utf-8") as fh:

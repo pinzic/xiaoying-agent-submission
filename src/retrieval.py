@@ -95,9 +95,8 @@ class Retriever:
             for t in set(tokens_all):
                 self.df[t] = self.df.get(t, 0) + 1
 
-        total = sum(c.length for c in self.chunks) or 1
-        self.avg_len = total / len(self.chunks)
         self.n_chunks = len(self.chunks)
+        self.avg_len = (sum(c.length for c in self.chunks) / self.n_chunks) if self.n_chunks else 0.0
 
     def _idf(self, term: str) -> float:
         df = self.df.get(term, 0)
@@ -119,7 +118,7 @@ class Retriever:
     def search(self, query: str, top_k: int = 5, expand: bool = True) -> List[Hit]:
         q = self.expand(query) if expand else query
         terms = query_terms(q, self.stopwords)
-        if not terms:
+        if not terms or not self.chunks:
             return []
         qset = list(dict.fromkeys(terms))
         k1, b = self.cfg["k1"], self.cfg["b"]

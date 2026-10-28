@@ -24,7 +24,8 @@
 - 步数 / 工具调用上限与明确的未完成状态；
 - 引用校验（逐字匹配 + 数字溯源）与答案组装；
 - 离线 Mock 规划器 + OpenAI 兼容的真实模型规划器；
-- 7 组运行材料（正常 / 冲突 / 资料外 / 改写 / 追问 / 工具失败可恢复 / 工具失败不可恢复）。
+- 9 组运行材料（正常 / 冲突 / 资料外 / 改写 / 追问 / 工具失败可恢复 / 工具失败不可恢复 / 步数上限 / 工具调用上限）；
+- 1 份文档扰动对照报告（`examples/ablation_report.md`）。
 
 **不做**（明确排除）：
 - Web 界面、线上部署、多 Agent 协作、生产级 Runtime；
@@ -41,8 +42,8 @@
 | A4 | 改写后的相似问题 | 与标准问法命中同一文档、给出同一结论 | `examples/case4_paraphrase` |
 | A5 | 上下文追问 | 仅凭当前问题无法定位文档，结合历史后命中正确文档 | `examples/case5_followup` |
 | A6 | 工具失败 | 可恢复时换策略重试；不可恢复时 `status=failed` 且不输出答案 | `examples/case6_tool_failure_recover`、`case7_tool_failure_terminal` |
-| A7 | 动态决策 | 同一问题在"只有一篇文档"与"两篇冲突"环境下动作序列不同 | `tests/test_robustness.py` |
-| A8 | 执行上限 | 触达步数/工具调用上限返回 `incomplete` | `tests/test_agent_paths.py::test_limits_return_incomplete` |
+| A7 | 动态决策 | 同一问题在"只有一篇文档"与"两篇冲突"环境下动作序列不同 | `examples/ablation_report.md`、`tests/test_robustness.py` |
+| A8 | 执行上限 | 触达步数/工具调用上限返回 `incomplete`，`answer=null` | `examples/case8_step_limit`、`examples/case9_tool_call_limit` |
 
 ## 5. 非目标层面的取舍
 

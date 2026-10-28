@@ -3,5 +3,6 @@
   "history": [],
   "faults": {},
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "文档冲突：D01（30 天）与 D02（15 天）都适用且无优先条款，列出冲突与引用并请求确认。"
 }

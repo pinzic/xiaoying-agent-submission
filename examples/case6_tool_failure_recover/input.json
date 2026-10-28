@@ -5,5 +5,6 @@
     "search_docs": 1
   },
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "工具失败（可恢复）：首次检索超时，改用更短关键词重试成功，最终仍正确处理冲突。"
 }

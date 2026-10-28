@@ -40,28 +40,32 @@ python -m src.cli --question "报销期限是多久？" --fault search_docs:1
 # 工具失败（不可恢复）→ failed，明确报告工具不可用
 python -m src.cli --question "报销期限是多久？" --fault search_docs:2
 
-# 执行上限 → incomplete
+# 执行上限 → incomplete（步数上限 / 工具调用上限两种）
 python -m src.cli --question "报销期限是多久？" --max-steps 2
+python -m src.cli --question "报销期限是多久？" --max-tool-calls 1
 ```
 
 把结果落盘（`output.json` + `trace.jsonl`）：
 
 ```bash
-python -m src.cli --question "报销期限是多久？" --out /tmp/run1
+python -m src.cli --question "报销期限是多久？" --out .tmp/run1
 ```
 
 ### 测试
 
 ```bash
 python -m unittest discover -s tests -v
-# Ran 28 tests ... OK
+# Ran 39 tests ... OK
 ```
 
-### 重新生成 examples
+### 重新生成验证材料
 
 ```bash
-python -m scripts.gen_examples
+python -m scripts.gen_examples    # examples/ 下 9 组输入 / 输出 / trace
+python -m scripts.run_ablation    # 文档扰动对照实验 → examples/ablation_report.md
 ```
+
+`run_ablation` 自带断言：改动文档后若状态或答案没有按预期变化，脚本以非零码退出。
 
 ---
 
@@ -74,12 +78,14 @@ python -m scripts.gen_examples
 | 测试预期 / 实际结果 / 失败与限制 | [`docs/03-evaluation.md`](docs/03-evaluation.md) |
 | AI 使用范围与个人验证 | [`docs/04-ai-usage.md`](docs/04-ai-usage.md) |
 | 复盘、用时、未完成项 | [`docs/05-retrospective.md`](docs/05-retrospective.md) |
-| 7 组输入 / 实际输出 / Trace | [`examples/`](examples/README.md) |
+| 9 组输入 / 实际输出 / Trace | [`examples/`](examples/README.md) |
+| 替换文档内容的对照实验 | [`examples/ablation_report.md`](examples/ablation_report.md) |
 | 合成制度与冲突规则 | [`data/docs/`](data/docs)、[`data/rules.json`](data/rules.json) |
 | 核心代码 | [`src/agent.py`](src/agent.py)（ReAct 循环）、[`src/retrieval.py`](src/retrieval.py)、[`src/conflict.py`](src/conflict.py)、[`src/answer.py`](src/answer.py) |
 
 **建议的 5 分钟评审路径**：先看 `examples/case2_doc_conflict/trace.jsonl`（冲突如何被发现与处理），
 再看 `src/agent.py` 的 `run()`（循环与上限）和 `src/answer.py` 的 `verify_answer()`（引用校验），
+然后看 `examples/ablation_report.md`（改文档后答案是否跟着变），
 最后跑 `python -m unittest discover -s tests`。
 
 ---
@@ -102,8 +108,11 @@ xiaoying-agent-submission/
 │   ├── planner_mock.py       # 离线启发式规划器（验证流程，不代表真实模型能力）
 │   ├── planner_llm.py        # 真实模型规划器（OpenAI 兼容 /chat/completions）
 │   └── cli.py                # 运行入口
-├── tests/                    # 28 个 unittest 用例
-├── examples/                 # 7 组输入 + 实际输出 + trace.jsonl
+├── scripts/
+│   ├── gen_examples.py       # 生成 9 组验证材料
+│   └── run_ablation.py       # 文档扰动对照实验（带自检断言）
+├── tests/                    # 39 个 unittest 用例
+├── examples/                 # 9 组输入 + 实际输出 + trace.jsonl + 扰动报告
 ├── data/
 │   ├── docs/                 # 13 份合成制度 / FAQ（D01–D09、P01–P03）
 │   └── rules.json            # 同义词、停用词、冲突取值规则、适用范围映射
@@ -160,7 +169,7 @@ python -m src.cli --question "报销期限是多久？" --planner llm
 `src/planner_llm.py` 用标准库 `urllib` 直接请求 `/chat/completions`，不依赖 SDK；
 模型返回 JSON 动作，Agent 执行工具后把观察摘要回灌给模型，进入下一轮。
 
-> 边界说明：**Mock 只验证流程与工程约束，不证明真实模型的决策效果**。仓库中的 7 组 trace 均由 Mock 规划器生成，
+> 边界说明：**Mock 只验证流程与工程约束，不证明真实模型的决策效果**。仓库中的 9 组 trace 均由 Mock 规划器生成，
 > 目的是让评审在没有密钥的环境里也能复现完整链路。真实模型链路的代码路径已实现，但未在本次提交中附上真实调用记录（原因见 `docs/03-evaluation.md`）。
 
 ---
@@ -174,3 +183,5 @@ python -m src.cli --question "报销期限是多久？" --planner llm
 4. **Mock 规划器是启发式的**：它按观察结果分支（无命中→扩检索、冲突未决→追问、工具报错→重试/失败），
    但不具备真实模型的语义理解能力。
 5. **无会话存储**：`history` 由调用方传入，服务端不保存多轮状态。
+6. **候选上限 2 篇**：`MockPlanner` 只取得分最高的 2 篇候选做一致性核查，
+   若冲突存在于第 3 篇及以后（当前语料不存在这种情况）会被漏掉。真实模型规划器无此限制。

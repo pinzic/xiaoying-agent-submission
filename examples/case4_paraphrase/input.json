@@ -3,5 +3,6 @@
   "history": [],
   "faults": {},
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "改写问句：口语「补休/最晚多久」经同义词扩展仍命中 D04，答案与标准问法一致。"
 }

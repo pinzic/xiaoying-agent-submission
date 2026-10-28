@@ -10,7 +10,6 @@ from .agent import Agent
 from .docs_store import DocStore
 from .models import DOCS_DIR, load_rules
 from .planner_llm import LLMPlanner
-from .planner_mock import MockPlanner
 
 
 def parse_faults(items):
@@ -42,6 +41,8 @@ def main(argv=None):
     parser.add_argument("--out", help="输出目录：写 output.json 与 trace.jsonl")
     parser.add_argument("--quiet", action="store_true", help="只写文件不打印")
     args = parser.parse_args(argv)
+    if not args.question.strip():
+        parser.error("--question 不能为空：没有问题时无法检索，也就无法给出有依据的答案")
 
     rules = load_rules()
     store = DocStore(Path(args.docs_dir))

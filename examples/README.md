@@ -21,6 +21,11 @@
 | [case5_followup](case5_followup/) | 上下文追问 | `answered`（D05 / 3 个工作日） | `answered` |
 | [case6_tool_failure_recover](case6_tool_failure_recover/) | 工具失败（可恢复） | 重试成功 | `needs_clarification` |
 | [case7_tool_failure_terminal](case7_tool_failure_terminal/) | 工具失败（不可恢复） | `failed` | `failed` |
+| [case8_step_limit](case8_step_limit/) | 执行步数上限 | `incomplete` | `incomplete` |
+| [case9_tool_call_limit](case9_tool_call_limit/) | 工具调用次数上限 | `incomplete` | `incomplete` |
+
+另有 [ablation_report.md](ablation_report.md)：**替换文档内容**的对照实验
+（`python -m scripts.run_ablation` 生成，改动原文后答案/动作是否随之变化）。
 
 ## 怎么读 trace
 

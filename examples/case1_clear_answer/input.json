@@ -3,5 +3,6 @@
   "history": [],
   "faults": {},
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "正常路径：命中单一制度，读取原文后直接作答并给出逐字引用。"
 }

@@ -12,5 +12,6 @@
   ],
   "faults": {},
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "上下文追问：问题本身没有「年假」，Agent 用上一轮问题补全检索词后命中 D05 的申请时限。"
 }

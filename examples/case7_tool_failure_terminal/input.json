@@ -5,5 +5,6 @@
     "search_docs": 2
   },
   "max_steps": 8,
+  "max_tool_calls": 6,
   "note": "工具失败（不可恢复）：两次检索均超时，返回 failed 并说明工具不可用，不猜测答案。"
 }

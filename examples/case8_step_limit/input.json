@@ -1,0 +1,8 @@
+{
+  "question": "报销期限是多久？",
+  "history": [],
+  "faults": {},
+  "max_steps": 2,
+  "max_tool_calls": 6,
+  "note": "执行上限：把步数预算压到 2 步，任务在读原文之前就被中止，返回 incomplete 且不输出未验证答案。"
+}

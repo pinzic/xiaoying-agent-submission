@@ -1,0 +1,8 @@
+{
+  "question": "报销期限是多久？",
+  "history": [],
+  "faults": {},
+  "max_steps": 8,
+  "max_tool_calls": 1,
+  "note": "工具调用上限：只允许 1 次工具调用，检索完成后无法读原文，返回 incomplete 并说明是哪种上限。"
+}

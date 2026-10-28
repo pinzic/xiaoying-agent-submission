@@ -49,6 +49,14 @@ class MockPlanner:
     # ---------- 各阶段 ----------
     def _after_search(self, ctx: Context, last: Dict[str, Any]) -> Action:
         if not last["ok"]:
+            # 参数错误（如检索词为空）重试同一类参数没有意义，直接如实报告；
+            # 只有上游故障才值得换策略重试一次。
+            if str(last.get("error", "")).startswith("bad_arguments"):
+                return self._fail(
+                    f"检索请求参数不合法（{last['error']}），无法从知识库取证",
+                    "检索词为空或非法：没有可检索的依据，明确报告而不是把参数问题说成服务故障",
+                    gaps=["检索词为空或非法，本次未能完成检索"],
+                )
             fails = ctx.tool_failures.get("search_docs", 0)
             if fails <= 1:
                 return Action(
@@ -136,6 +144,17 @@ class MockPlanner:
 
     def _after_consistency(self, ctx: Context, last: Dict[str, Any]) -> Action:
         if not last["ok"]:
+            if str(last.get("error", "")).startswith("bad_arguments"):
+                # 参数不合法（如可读候选不足两篇）：重试同样的参数必然再失败，改为直接作答或报告
+                docs = list(ctx.read_docs.values())
+                if docs:
+                    return Action(
+                        "finish",
+                        self.answerer.compose_clear(self.query, docs),
+                        "一致性核查因候选不足两篇无法执行，改为依据已读原文作答并在结论中说明",
+                    )
+                return self._fail("可用于比对的文档不足两篇且没有已读原文",
+                                  "缺少可比对原文，终止并报告")
             fails = ctx.tool_failures.get("check_consistency", 0)
             if fails <= 1:
                 return Action(
