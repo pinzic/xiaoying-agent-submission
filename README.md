@@ -1,6 +1,20 @@
 # 企业知识问答 Agent（小影校招 AI Agent 开发岗 · 考核提交）
 
-> 题号：**企业知识问答 Agent**
+## 提交信息
+
+| 项 | 值 |
+| --- | --- |
+| 题号 | **企业知识问答 Agent** |
+| GitHub URL | `待填写（仓库尚未创建）` |
+| 最终 commit SHA | `待填写`（本地最新为 `e34b818`，推送后以远端为准） |
+
+> 建好仓库后，在本目录执行下面三步，然后把上表两行替换掉即可（详见 [§7 推送到 GitHub](#7-推送到-github)）：
+> ```bash
+> git remote add origin <你的仓库地址>
+> git push -u origin main
+> git rev-parse HEAD        # 输出即最终 commit SHA
+> ```
+
 > 目标：帮员工在合成制度库/产品 FAQ 中找到**可核验**的答案——每条结论都能落到文档 ID、章节与逐字原文；
 > 遇到文档冲突且没有适用范围/优先依据时，**追问而不是替用户选**。
 
@@ -185,3 +199,28 @@ python -m src.cli --question "报销期限是多久？" --planner llm
 5. **无会话存储**：`history` 由调用方传入，服务端不保存多轮状态。
 6. **候选上限 2 篇**：`MockPlanner` 只取得分最高的 2 篇候选做一致性核查，
    若冲突存在于第 3 篇及以后（当前语料不存在这种情况）会被漏掉。真实模型规划器无此限制。
+
+---
+
+## 7. 推送到 GitHub
+
+仓库已在本地初始化（`main` 分支，最新 commit `e34b818`），尚未关联远端：
+
+```bash
+cd xiaoying-agent-submission
+
+# 1. 在 GitHub 上建好空仓库（不要勾选初始化 README），复制地址
+git remote add origin https://github.com/<你的账号>/<仓库名>.git
+git push -u origin main
+
+# 2. 取最终 commit SHA，填回本文顶部「提交信息」表
+git rev-parse HEAD
+```
+
+- **私有仓库**：务必在 Settings → Collaborators 里把评审账号加为可读，否则评审看不到代码。
+- 仓库中**不含任何真实密钥**：`.env.example` 只有变量名，`.env` 已被 `.gitignore` 忽略。
+- 推送后建议再跑一遍验收，确认远端代码与本地一致：
+  ```bash
+  python -m unittest discover -s tests        # 39 passed
+  python -m scripts.run_ablation              # 6 组扰动实验全部符合预期
+  ```
