@@ -5,15 +5,11 @@
 | 项 | 值 |
 | --- | --- |
 | 题号 | **企业知识问答 Agent** |
-| GitHub URL | `待填写（仓库尚未创建）` |
-| 最终 commit SHA | `待填写`（本地最新为 `e34b818`，推送后以远端为准） |
+| GitHub URL | https://github.com/pinzic/xiaoying-agent-submission |
+| 最终 commit SHA | `39d3d52dcb3bfc286cf02bc437761ec8069bd7ef` |
 
-> 建好仓库后，在本目录执行下面三步，然后把上表两行替换掉即可（详见 [§7 推送到 GitHub](#7-推送到-github)）：
-> ```bash
-> git remote add origin <你的仓库地址>
-> git push -u origin main
-> git rev-parse HEAD        # 输出即最终 commit SHA
-> ```
+> 仓库为 **Public**，评审可直接访问。`39d3d52` 包含全部代码与文档；其后仅有一次 `docs:` 提交用于回填本表的地址与 SHA。
+> 远端核对：`git rev-parse origin/main`（详见 [§7 仓库地址](#7-仓库地址)）。
 
 > 目标：帮员工在合成制度库/产品 FAQ 中找到**可核验**的答案——每条结论都能落到文档 ID、章节与逐字原文；
 > 遇到文档冲突且没有适用范围/优先依据时，**追问而不是替用户选**。
@@ -202,24 +198,20 @@ python -m src.cli --question "报销期限是多久？" --planner llm
 
 ---
 
-## 7. 推送到 GitHub
+## 7. 仓库地址
 
-仓库已在本地初始化（`main` 分支，最新 commit `e34b818`），尚未关联远端：
+**https://github.com/pinzic/xiaoying-agent-submission**（Public）
 
 ```bash
+git clone https://github.com/pinzic/xiaoying-agent-submission.git
 cd xiaoying-agent-submission
-
-# 1. 在 GitHub 上建好空仓库（不要勾选初始化 README），复制地址
-git remote add origin https://github.com/<你的账号>/<仓库名>.git
-git push -u origin main
-
-# 2. 取最终 commit SHA，填回本文顶部「提交信息」表
-git rev-parse HEAD
+git log --oneline -3
 ```
 
-- **私有仓库**：务必在 Settings → Collaborators 里把评审账号加为可读，否则评审看不到代码。
+- 仓库为 **Public**，评审可直接访问，无需额外授权。
+- 提交 SHA：`39d3d52dcb3bfc286cf02bc437761ec8069bd7ef`（即 `origin/main` 上的代码提交）。
 - 仓库中**不含任何真实密钥**：`.env.example` 只有变量名，`.env` 已被 `.gitignore` 忽略。
-- 推送后建议再跑一遍验收，确认远端代码与本地一致：
+- 克隆后建议再跑一遍验收，确认远端代码与本地一致：
   ```bash
   python -m unittest discover -s tests        # 39 passed
   python -m scripts.run_ablation              # 6 组扰动实验全部符合预期
